@@ -13,13 +13,13 @@ export default function App() {
     document.title = "Weigamer • Consolas retro y actuales";
   }, []);
 
-  // ===== Carrito =====
+
   const [cart, setCart] = useState(() => {
     try { return JSON.parse(localStorage.getItem(CART_KEY)) ?? []; } catch { return []; }
   });
   useEffect(() => localStorage.setItem(CART_KEY, JSON.stringify(cart)), [cart]);
 
-  // ===== Toast =====
+  
   const [toast, setToast] = useState({ show: false, msg: "" });
   const toastTimer = useRef(null);
   const showToast = (msg) => {
@@ -28,10 +28,10 @@ export default function App() {
     toastTimer.current = setTimeout(() => setToast({ show: false, msg: "" }), 1300);
   };
 
-  // helpers
+ 
   const getQty = (id) => cart.find((x) => x.id === id)?.qty ?? 0;
 
-  // acciones carrito
+
   const addToCart = (product) => {
     const current = getQty(product.id);
     const max = product.stock ?? 99;
