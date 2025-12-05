@@ -40,9 +40,30 @@ export default function Register() {
       return;
     }
 
-    const data = Object.fromEntries(new FormData(formRef.current).entries());
-    console.log("Registro enviado:", data);
-    alert("Cuenta creada correctamente (demo).");
+  
+    fetch('http://localhost:5000/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: form.email, password: form.password }),
+    })
+    .then(res => {
+        if (!res.ok) {
+            throw new Error('El registro falló en el servidor.');
+        }
+        return res.json();
+    })
+    .then(data => {
+        alert(data.message); 
+        setSuccess(true);
+        setForm({ email: "", password: "", confirmPassword: "" });
+    })
+    .catch(error => {
+        console.error("Error de registro:", error);
+        setError("Error al registrar: " + error.message);
+    });
+
   };
 
   const regiones = Object.keys(REGIONES);

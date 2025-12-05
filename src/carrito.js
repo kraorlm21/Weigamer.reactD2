@@ -3,6 +3,29 @@ import { Link } from "react-router-dom";
 const money = (n) => `${n.toFixed(2)} USD`;
 
 export default function Carrito({ items, increment, decrement, removeItem, clear, total }) {
+  
+  const handleCheckout = () => {
+    fetch('http://localhost:5000/api/checkout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        
+        body: JSON.stringify({ items, total }),
+    })
+    .then(res => res.json())
+    .then(data => {
+        
+        alert(data.message);
+        
+        clear(); 
+    })
+    .catch(error => {
+        console.error("Error al procesar la compra:", error);
+        alert("Hubo un error al procesar el pago. Intenta de nuevo.");
+    });
+  };
+
   return (
     <div style={{ padding: "2rem", color: "#fff" }}>
       <h1 style={{ fontSize: "1.6rem", marginBottom: 8 }}>Tu carrito</h1>
@@ -52,7 +75,7 @@ export default function Carrito({ items, increment, decrement, removeItem, clear
               <strong style={{ fontSize: "1.2rem" }}>{money(total)}</strong>
               <button
                 style={footerStyles.checkout}
-                onClick={() => alert("Compra simulada (demo).")}
+                onClick={handleCheckout} 
               >
                 Pagar
               </button>
